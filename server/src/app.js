@@ -8,11 +8,11 @@ const app = express()
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
-/* GET POST PUT PATCH DELETE */
-app.get('/status', (req, res) => {
+app.post('/register', (req, res) => {
+  console.log(req.body)
   res.send({
-    message: 'Hello world!'
+    message: `Hello ${req.body.email}!Your user was registred! Have fun!`
   })
 })
 
-app.listen(8081)
+app.listen(process.env.PORT || 8081)
