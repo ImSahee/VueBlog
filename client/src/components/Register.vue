@@ -7,24 +7,27 @@
         </v-toolbar>
         <div class="pl-4 pr-4 pt-2 pb-2">
         <div class="error" v-html="error" />
-        <v-layout row>
-          <v-flex xs12>
-            <v-text-field
-              v-model="email"
-              label="Input Email"
-            ></v-text-field>
-          </v-flex>
-        </v-layout>
-        <v-layout row>
-          <v-flex xs12>
-            <v-text-field
-              v-model="password"
-              type="password"
-              label="Input Password"
-            ></v-text-field>
-          </v-flex>
-        </v-layout>
-        <v-btn @click="register" dark class="cyan">Register</v-btn>
+          <form name="vue-blog-form" autocomplete="off">
+            <v-layout row>
+              <v-flex xs12>
+                <v-text-field
+                  v-model="email"
+                  label="Input Email"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
+            <v-layout row>
+              <v-flex xs12>
+                <v-text-field
+                  v-model="password"
+                  type="password"
+                  autocomplete="new-password"
+                  label="Input Password"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
+            <v-btn @click="register" dark class="cyan">Register</v-btn>
+          </form>
         </div>
       </div>
     </v-flex>
@@ -44,11 +47,12 @@ export default {
   methods: {
     async register () {
       try {
-        let response = await AuthenticationService.register({
+        const response = await AuthenticationService.register({
           email: this.email,
           password: this.password
         })
-        console.log('register ', response)
+        this.$store.dispatch('setToken', response.data.token)
+        this.$store.dispatch('setUser', response.data.user)
       } catch (error) {
         console.log(error)
         this.error = error.response.data.error

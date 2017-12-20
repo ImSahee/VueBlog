@@ -7,6 +7,9 @@
         </v-toolbar>
         <div class="pl-4 pr-4 pt-2 pb-2">
         <div class="error" v-html="error" />
+        <form 
+          name="vue-blog-form"
+          autocomplete="off">
         <v-layout row>
           <v-flex xs12>
             <v-text-field
@@ -24,8 +27,11 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
+
         <v-btn @click="login" dark class="cyan">Login</v-btn>
+        </form>
         </div>
+
       </div>
     </v-flex>
   </v-layout>
@@ -44,11 +50,12 @@ export default {
   methods: {
     async login () {
       try {
-        let response = await AuthenticationService.login({
+        const response = await AuthenticationService.login({
           email: this.email,
           password: this.password
         })
-        console.log('login ', response)
+        this.$store.dispatch('setToken', response.data.token)
+        this.$store.dispatch('setUser', response.data.user)
       } catch (error) {
         this.error = error.response.data.error
       }
